@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kot Concept Academy</title>
+<meta name="description" content="Курс по SMM для бюро авторских интерьеров «Кота Андрея»">
+<meta name="theme-color" content="#1C1A17">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kot Concept">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<script src="vendor/marked.min.js"></script>
+<style>
+  :root {
+    --bg: #F5F4F1; --surface: #FFFFFF; --ink: #1C1A17; --muted: #777168;
+    --line: #E4E1DA; --soft: #ECEAE5;
+    --radius: 14px; --nav-h: 64px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font-family: Montserrat, "Century Gothic", Arial, sans-serif; font-weight: 400; font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  .app { min-height: 100vh; }
+  .sidebar { display: none; }
+  main { padding: calc(16px + env(safe-area-inset-top)) 16px calc(var(--nav-h) + 24px + env(safe-area-inset-bottom)); max-width: 760px; margin: 0 auto; }
+  .bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; min-height: var(--nav-h); background: var(--surface); border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); z-index: 10; }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 6px 6px; }
+  .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.4; }
+  .nav-item.active { color: var(--ink); }
+
+  @media (min-width: 900px) {
+    .app { display: grid; grid-template-columns: 240px 1fr; }
+    .bottom-nav { display: none; }
+    .sidebar { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; padding: 28px 18px; border-right: 1px solid var(--line); background: var(--surface); }
+    .sidebar .logo { width: 180px; margin: 0 0 28px 6px; }
+    .sidebar .nav-item { flex-direction: row; gap: 12px; font-size: 12px; padding: 12px; border-radius: 10px; }
+    .sidebar .nav-item.active { background: var(--bg); }
+    main { padding: 40px 40px 60px; }
+  }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .topbar .logo { height: 40px; }
+  @media (min-width: 900px) { .topbar .logo { display: none; } }
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+
+  h1 { font-weight: 200; font-size: 30px; line-height: 1.15; letter-spacing: .02em; margin: 0 0 8px; }
+  h2 { font-weight: 300; font-size: 22px; letter-spacing: .02em; margin: 28px 0 12px; }
+  h3 { font-weight: 500; font-size: 16px; margin: 20px 0 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .muted { color: var(--muted); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+  .card + .card { margin-top: 12px; }
+  .hero { background: var(--ink); color: #F5F4F1; border: 0; padding: 24px; }
+  .hero .eyebrow { color: #B9B4AA; }
+  .hero h1 { color: #F5F4F1; }
+  .progress { height: 4px; background: rgba(255,255,255,.18); border-radius: 4px; overflow: hidden; margin: 16px 0 6px; }
+  .progress > div { height: 100%; background: #F5F4F1; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--ink); background: var(--ink); color: #F5F4F1; padding: 12px 18px; border-radius: 10px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .hero .btn { background: #F5F4F1; color: var(--ink); border-color: #F5F4F1; margin-top: 12px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 96px; }
+  .tile svg { width: 24px; height: 24px; stroke: var(--ink); fill: none; stroke-width: 1.4; }
+  .tile span { font-size: 12px; font-weight: 500; }
+  .tile small { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+
+  .list-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .list-item:last-child { border-bottom: 0; }
+  .num { font-weight: 200; font-size: 22px; min-width: 34px; color: var(--muted); }
+  .li-body { flex: 1; min-width: 0; }
+  .li-title { font-weight: 500; }
+  .li-sub { font-size: 12px; color: var(--muted); }
+  .badge { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 8px; border-radius: 20px; background: var(--soft); color: var(--muted); white-space: nowrap; }
+  .badge.ok { background: var(--ink); color: #F5F4F1; }
+  .locked { opacity: .5; }
+
+  .tabs { display: flex; gap: 6px; background: var(--soft); padding: 4px; border-radius: 12px; margin: 16px 0; position: sticky; top: 8px; z-index: 5; }
+  .tab { flex: 1; border: 0; background: transparent; padding: 10px; border-radius: 9px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .tab.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+
+  .md { overflow-wrap: anywhere; }
+  .md table { width: 100%; border-collapse: collapse; font-size: 13px; display: block; overflow-x: auto; }
+  .md th, .md td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; vertical-align: top; }
+  .md th { font-weight: 500; }
+  .md blockquote { margin: 12px 0; padding: 12px 16px; background: var(--soft); border-radius: 10px; }
+  .md blockquote p { margin: 4px 0; }
+  .md code { background: var(--soft); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  .md ul, .md ol { padding-left: 20px; }
+  .footnote { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+
+  .check { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .check input { width: 20px; height: 20px; accent-color: var(--ink); margin-top: 2px; flex: none; }
+
+  .player { display: flex; align-items: center; gap: 14px; }
+  .play { width: 56px; height: 56px; border-radius: 50%; border: 0; background: var(--ink); color: #F5F4F1; display: grid; place-items: center; flex: none; }
+  .play svg { width: 22px; height: 22px; fill: currentColor; }
+  .script { white-space: pre-wrap; font-size: 14px; }
+  .script .pause { color: var(--muted); font-size: 11px; letter-spacing: .1em; }
+
+  .term { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .term b { font-weight: 600; }
+  .search, select, input[type=range] { width: 100%; }
+  input[type=range] { accent-color: var(--ink); margin: 8px 0 16px; }
+  .search, select { padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font: inherit; margin-bottom: 8px; color: var(--ink); }
+
+  .chat { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .msg { max-width: 85%; padding: 12px 14px; border-radius: 14px; }
+  .msg.bot { background: var(--surface); border: 1px solid var(--line); align-self: flex-start; }
+  .msg.me { background: var(--ink); color: #F5F4F1; align-self: flex-end; }
+  .msg small { display: block; margin-top: 6px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .composer { display: flex; gap: 8px; position: sticky; bottom: calc(var(--nav-h) + 8px + env(safe-area-inset-bottom)); }
+  @media (min-width: 900px) { .composer { bottom: 16px; } }
+  .composer input { flex: 1; padding: 14px; border: 1px solid var(--line); border-radius: 12px; font: inherit; background: var(--surface); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .chip { border: 1px solid var(--line); background: var(--surface); padding: 8px 12px; border-radius: 20px; font-size: 12px; }
+  .mode { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #6E8B5E; }
+  .dot.off { background: #B9B4AA; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .row:last-child { border-bottom: 0; }
+  .install-steps li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main id="view"><p class="muted">Загрузка…</p></main>
+</div>
+<nav class="bottom-nav" id="bottomnav"></nav>
+
+<script>
+// ===== Настройки: app/config.json (копируется в сборку). Пользовательские настройки — в памяти браузера. =====
+let CFG = null, MODULES = [], TOTAL = 0;
+const PREFIX = () => (CFG && CFG.app.storage_prefix) || "kca:";
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(PREFIX() + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(PREFIX() + k, JSON.stringify(v)); } catch (e) {} }
+};
+const userSettings = () => Object.assign({ rate: CFG.audio.rate, voice: "" }, store.get("settings", {}));
+const num = code => code.split("-").map(Number).join(".");
+
+// ===== Загрузка и разбор уроков =====
+const cache = {};
+async function loadText(path) {
+  if (cache[path]) return cache[path];
+  const r = await fetch(path);
+  if (!r.ok) throw new Error("Не найден файл: " + path);
+  return (cache[path] = await r.text());
+}
+const lessonPath = f => `content/lessons/${f}.md`;
+const audioPath = f => `content/audio/${f}-audio.md`;
+function stripFront(md) { return md.replace(/^---[\s\S]*?\n---\s*/, ""); }
+function sections(md) {
+  const out = {}; let cur = "_intro";
+  for (const line of stripFront(md).split("\n")) {
+    const m = line.match(/^## (.+)/);
+    if (m) { cur = m[1].trim(); out[cur] = ""; continue; }
+    out[cur] = (out[cur] || "") + line + "\n";
+  }
+  return out;
+}
+function terms(sec) {
+  return (sec["Термины урока"] || "").split("\n").filter(l => l.startsWith("- **")).map(l => {
+    const m = l.match(/^- \*\*(.+?)\*\* — (.*?)(?: \*Пример:\* (.*))?$/);
+    return m ? { term: m[1], def: m[2], ex: m[3] || "" } : null;
+  }).filter(Boolean);
+}
+function qa(sec) {
+  const txt = sec["Вопросы и ответы"] || ""; const out = [];
+  const re = /\*\*Вопрос:\*\* (.+)\n\*\*Ответ:\*\* (.+)/g; let m;
+  while ((m = re.exec(txt))) out.push({ q: m[1].trim(), a: m[2].trim() });
+  return out;
+}
+async function allLessons() {
+  const res = [];
+  for (const mod of MODULES) for (const l of mod.lessons) if (l.file) {
+    try { res.push({ ...l, sec: sections(await loadText(lessonPath(l.file))) }); } catch (e) {}
+  }
+  return res;
+}
+
+// ===== Иконки =====
+const I = {
+  home: '<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  course: '<svg viewBox="0 0 24 24"><path d="M4 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4zM20 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z"/></svg>',
+  bot: '<svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6"/></svg>',
+  book: '<svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
+  gear: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>',
+  card: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 15h8M8 18h5"/><rect x="8" y="6" width="8" height="6"/></svg>',
+  play: '<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
+  back: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg>'
+};
+
+// ===== Навигация =====
+const NAV = [
+  ["#/", "Главная", I.home], ["#/course", "Курс", I.course], ["#/assistant", "Помощник", I.bot],
+  ["#/glossary", "Глоссарий", I.book], ["#/settings", "Настройки", I.gear]
+];
+function renderNav(route) {
+  const items = NAV.map(([h, t, i]) => {
+    const active = (h === "#/" ? route === "" : route.startsWith(h.slice(2)));
+    return `<a class="nav-item ${active ? "active" : ""}" href="${h}">${i}<span>${t}</span></a>`;
+  }).join("");
+  document.getElementById("bottomnav").innerHTML = items;
+  document.getElementById("sidebar").innerHTML = `<img class="logo" src="${CFG.brand.logo}" alt="${CFG.app.name}">${items}`;
+}
+const topbar = () => `<div class="topbar"><img class="logo" src="${CFG.brand.logo}" alt="${CFG.app.name}"></div>`;
+const back = (href, text) => `<a class="back" href="${href}">${I.back}${text}</a>`;
+const META = '<p class="footnote">* Instagram и Threads принадлежат компании Meta, признанной экстремистской и запрещённой в РФ.</p>';
+
+// ===== Экраны =====
+const doneMap = () => store.get("done", {});
+function nextLesson() {
+  const d = doneMap();
+  for (const m of MODULES) for (const l of m.lessons) if (l.file && !d[l.code]) return l;
+  return MODULES[0].lessons[0];
+}
+
+function viewHome() {
+  const done = Object.keys(doneMap()).length; const pct = Math.round(done / TOTAL * 100);
+  const next = nextLesson();
+  return `${topbar()}
+  <div class="card hero">
+    <div class="eyebrow">${CFG.app.description}</div>
+    <h1>Добро пожаловать в&nbsp;академию</h1>
+    <div class="progress"><div style="width:${pct}%"></div></div>
+    <div class="eyebrow">Пройдено ${done} из ${TOTAL} уроков</div>
+    <a class="btn" href="#/lesson/${next.code}">Продолжить →</a>
+  </div>
+  <div class="tiles">
+    <a class="tile" href="#/assistant">${I.bot}<span>ИИ-помощник</span><small>демо</small></a>
+    <a class="tile" href="#/glossary">${I.book}<span>Глоссарий</span><small>термины</small></a>
+    <a class="tile" href="#/cards">${I.card}<span>Карточки</span><small>скоро</small></a>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Сейчас изучаете</div>
+    <h3 style="margin-top:6px">Урок ${num(next.code)}. ${next.title}</h3>
+    <div class="li-sub">Модуль ${Number(next.code.split("-")[0])} · ~${next.minutes || 30} мин</div>
+  </div>
+  <h2>Модули</h2>
+  <div class="card">${MODULES.map(moduleRow).join("")}</div>`;
+}
+
+function moduleRow(m) {
+  const count = m.lessons.length, ready = m.lessons.filter(l => l.file).length;
+  const d = doneMap(), passed = m.lessons.filter(l => d[l.code]).length;
+  const open = ready > 0;
+  const badge = !open ? "скоро" : passed === count ? "пройден" : passed ? `${passed} из ${count}` : `${ready} из ${count} готово`;
+  return `<a class="list-item ${open ? "" : "locked"}" href="${open ? "#/module/" + m.n : "#/course"}">
+    <div class="num">0${m.n}</div>
+    <div class="li-body"><div class="li-title">${m.title}</div><div class="li-sub">${count} уроков</div></div>
+    <span class="badge ${passed === count ? "ok" : ""}">${badge}</span></a>`;
+}
+
+function viewCourse() {
+  return `${topbar()}<div class="eyebrow">${CFG.app.name}</div><h1>Курс</h1>
+  <p class="muted">${MODULES.length} модулей, ${TOTAL} уроков. Модули открываются по мере готовности.</p>
+  <div class="card">${MODULES.map(moduleRow).join("")}</div>`;
+}
+
+function viewModule(n) {
+  const m = MODULES.find(x => x.n == n); if (!m) return viewCourse();
+  const d = doneMap();
+  return `${back("#/course", "Курс")}<div class="eyebrow">Модуль ${m.n}</div><h1>${m.title}</h1>
+  <div class="card">${m.lessons.map((l, i) => {
+    const ok = d[l.code], open = !!l.file;
+    return `<a class="list-item ${open ? "" : "locked"}" href="${open ? "#/lesson/" + l.code : "#/module/" + m.n}">
+      <div class="num">${String(i + 1).padStart(2, "0")}</div>
+      <div class="li-body"><div class="li-title">${l.title}</div><div class="li-sub">${open ? `Текст · аудио · практика · ~${l.minutes || 30} мин` : "В разработке"}</div></div>
+      <span class="badge ${ok ? "ok" : ""}">${ok ? "пройден" : open ? "открыт" : "скоро"}</span></a>`;
+  }).join("")}</div>`;
+}
+
+async function viewLesson(code, tab = "text") {
+  const l = MODULES.flatMap(m => m.lessons).find(x => x.code === code);
+  const modN = Number(code.split("-")[0]);
+  if (!l || !l.file) return `${back("#/module/" + modN, "Модуль " + modN)}<h1>Урок в разработке</h1>`;
+  const sec = sections(await loadText(lessonPath(l.file)));
+  const title = (sec._intro.match(/^# (.+)/m) || [])[1] || l.title;
+  const needsMeta = /Instagram|Threads/.test(title + (sec["Основной текст"] || ""));
+  const tabs = [["text", "Урок"], ["audio", "Аудио"], ["practice", "Практика"]].map(([k, t]) =>
+    `<button class="tab ${tab === k ? "active" : ""}" data-tab="${k}">${t}</button>`).join("");
+  let body = "";
+  if (tab === "text") {
+    const keep = ["Цель урока", "Зачем это нужно", "Основной текст", "Примеры", "Частые ошибки", "Что дальше"];
+    body = keep.filter(k => sec[k]).map(k => `<h2>${k}</h2>${marked.parse(sec[k])}`).join("");
+  } else if (tab === "audio") {
+    const audio = await loadText(audioPath(l.file)).catch(() => "");
+    const script = stripFront(audio).split("\n").filter(s => !s.startsWith("#")).join("\n").trim();
+    window.__script = script;
+    body = `<div class="card"><div class="player">
+      <button class="play" id="play" aria-label="Слушать">${I.play}</button>
+      <div><div class="li-title">Аудиоверсия урока</div><div class="li-sub" id="pstate">Озвучка голосом устройства</div></div></div>
+      <p class="note">Сейчас текст читает синтезатор речи устройства. Голос и скорость — в «Настройках». Позже здесь будет записанный голос.</p></div>
+      <h2>Текст для прослушивания</h2>
+      <div class="script">${script.replace(/\[пауза[^\]]*\]/g, '<span class="pause">· · ·</span>')}</div>`;
+  } else {
+    const crit = (sec["Критерии готовности"] || "").split("\n").filter(s => s.startsWith("- [ ]")).map(s => s.slice(6));
+    const checks = store.get("checks:" + code, {});
+    body = `<h2>Практическое задание</h2>${marked.parse(sec["Практическое задание"] || "")}
+      <h2>Шаблон</h2>${marked.parse(sec["Шаблон или чек-лист"] || "")}
+      <h2>Проверьте себя</h2><div class="card">${crit.map((c, i) =>
+        `<label class="check"><input type="checkbox" data-i="${i}" ${checks[i] ? "checked" : ""}><span>${c}</span></label>`).join("")}</div>
+      <p style="margin-top:16px"><button class="btn" id="done">${doneMap()[code] ? "Урок пройден ✓" : "Отметить урок пройденным"}</button></p>`;
+  }
+  return `${back("#/module/" + modN, "Модуль " + modN)}<div class="eyebrow">Урок ${num(code)}</div>
+    <h1>${title}</h1>${needsMeta ? META : ""}<div class="tabs">${tabs}</div><div class="md">${body}</div>`;
+}
+
+async function viewGlossary() {
+  const ls = await allLessons();
+  const all = ls.flatMap(l => terms(l.sec).map(t => ({ ...t, from: l.code })));
+  return `${topbar()}<div class="eyebrow">Все термины курса</div><h1>Глоссарий</h1>
+  <input class="search" id="gsearch" placeholder="Найти термин…" aria-label="Поиск термина">
+  <div class="card" id="glist">${all.map(t => `<div class="term" data-s="${(t.term + " " + t.def).toLowerCase()}">
+    <b>${t.term}</b> — ${t.def}${t.ex ? `<div class="li-sub">Пример: ${t.ex}</div>` : ""}
+    <div class="li-sub">Урок ${num(t.from)}</div></div>`).join("")}</div>
+  <p class="note">${all.length} терминов. Собираются автоматически из блока «Термины урока».</p>`;
+}
+
+function viewAssistant() {
+  const hist = store.get("chat", []);
+  return `${topbar()}<div class="eyebrow">${CFG.app.name}</div><h1>ИИ-помощник</h1>
+  <div class="mode"><span class="dot"></span>Демо · отвечает из базы знаний курса · работает офлайн</div>
+  <p class="note">Сейчас помощник ищет ответ в блоках «Вопросы и ответы» и «Термины урока». Настоящий помощник будет работать с локальной моделью офлайн и с облачной при подключении к интернету.</p>
+  <div class="chips">${CFG.assistant.suggestions.map(q => `<button class="chip" data-q="${q}">${q}</button>`).join("")}</div>
+  <div class="chat" id="chat">${hist.map(bubble).join("") || bubble({ who: "bot", text: "Здравствуйте! Я помощник Kot Concept Academy. Спросите меня о том, что есть в уроках курса." })}</div>
+  <form class="composer" id="ask"><input id="q" placeholder="Ваш вопрос…" autocomplete="off" aria-label="Ваш вопрос"><button class="btn" aria-label="Отправить">→</button></form>`;
+}
+function bubble(m) { return `<div class="msg ${m.who}">${m.text}${m.src ? `<small>${m.src}</small>` : ""}</div>`; }
+
+const STOP = new Set("что такое такой такая какой какая какие каких зачем почему если есть этот этого это эти можно нужно надо тоже когда чтобы через после очень будет было была были свой свои ваше ваши наши наше меня мной тебя себя про для или как где кто".split(" "));
+function stems(s) { return s.toLowerCase().replace(/ё/g, "е").replace(/[^a-zа-я0-9 ]/g, " ").split(/\s+/).filter(w => (w.length > 2 || /^[a-z]{2}$/.test(w)) && !STOP.has(w)).map(w => w.slice(0, 5)); }
+async function answer(q) {
+  const ls = await allLessons(); const qs = new Set(stems(q)); let best = null, score = 0;
+  for (const l of ls) {
+    for (const p of qa(l.sec)) {
+      const s = stems(p.q).filter(w => qs.has(w)).length * 2 + stems(p.a).filter(w => qs.has(w)).length * 0.5;
+      if (s > score) { score = s; best = { text: p.a, src: "Урок " + num(l.code) }; }
+    }
+    for (const t of terms(l.sec)) {
+      const s = stems(t.term).filter(w => qs.has(w)).length * 3;
+      if (s > score) { score = s; best = { text: `<b>${t.term}</b> — ${t.def}${t.ex ? " Пример: " + t.ex : ""}`, src: "Глоссарий · урок " + num(l.code) }; }
+    }
+  }
+  if (score >= CFG.assistant.min_score) return { who: "bot", ...best };
+  return { who: "bot", text: "Пока не знаю ответа: этой темы ещё нет в готовых уроках. Она появится по мере создания курса. В полной версии я смогу поискать ответ в интернете.", src: "Нет в базе знаний" };
+}
+
+function viewCards() {
+  return `${back("#/", "Главная")}<div class="eyebrow">Инструмент</div><h1>Генератор карточек</h1>
+  <div class="card"><p>Здесь будет генератор карточек в стиле бюро: выбираете шаблон, загружаете фото, пишете текст — и скачиваете готовую картинку для Instagram.</p>
+  <p class="muted">В разработке.</p></div>`;
+}
+
+function viewSettings() {
+  const s = userSettings();
+  const voices = (window.speechSynthesis ? speechSynthesis.getVoices() : []).filter(v => v.lang && v.lang.startsWith("ru"));
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  return `${topbar()}<div class="eyebrow">${CFG.app.name}</div><h1>Настройки</h1>
+  <h2>Озвучка</h2>
+  <div class="card">
+    <label class="li-sub" for="voice">Голос</label>
+    <select id="voice">${voices.length ? `<option value="">Автоматически (русский)</option>` + voices.map(v => `<option value="${v.name}" ${s.voice === v.name ? "selected" : ""}>${v.name}</option>`).join("") : `<option value="">Русские голоса на устройстве не найдены</option>`}</select>
+    <label class="li-sub" for="rate">Скорость: <span id="rateval">${s.rate}</span></label>
+    <input type="range" id="rate" min="0.7" max="1.2" step="0.05" value="${s.rate}">
+    <p><button class="btn ghost" id="testvoice">Прослушать пример</button></p>
+  </div>
+  <h2>Приложение</h2>
+  <div class="card">
+    <div class="row"><span>Версия</span><span class="muted">${CFG.app.version}</span></div>
+    <div class="row"><span>Работа без интернета</span><span class="muted" id="offline">${"serviceWorker" in navigator ? "проверяется…" : "не поддерживается"}</span></div>
+    <div class="row"><span>Установлено как приложение</span><span class="muted">${standalone ? "да" : "нет"}</span></div>
+    <div class="row"><span>Пройдено уроков</span><span class="muted">${Object.keys(doneMap()).length} из ${TOTAL}</span></div>
+  </div>
+  ${standalone ? "" : `<h2>Установить приложение</h2>
+  <div class="card">
+    <p id="installbox">${window.__installPrompt ? `<button class="btn" id="install">Установить</button>` : ""}</p>
+    <ul class="install-steps">
+      <li><b>Компьютер (Windows, Mac) — Edge или Chrome:</b> значок «Установить» в адресной строке или меню → «Установить приложение».</li>
+      <li><b>iPhone и iPad — Safari:</b> кнопка «Поделиться» → «На экран „Домой“».</li>
+      <li><b>MacBook — Safari:</b> меню «Файл» → «Добавить в Dock».</li>
+      <li><b>Android — Chrome:</b> меню ⋮ → «Установить приложение» или «Добавить на главный экран».</li>
+    </ul>
+  </div>`}
+  <h2>Данные</h2>
+  <div class="card">
+    <p class="note">Прогресс, отметки и история помощника хранятся только на этом устройстве.</p>
+    <p><button class="btn ghost" id="reset">Сбросить прогресс</button></p>
+  </div>`;
+}
+
+// ===== Роутер =====
+async function render() {
+  const route = location.hash.replace(/^#\/?/, "");
+  renderNav(route);
+  const v = document.getElementById("view");
+  const [a, b, c] = route.split("/");
+  let html;
+  try {
+    if (a === "course") html = viewCourse();
+    else if (a === "module") html = viewModule(b);
+    else if (a === "lesson") html = await viewLesson(b, c || "text");
+    else if (a === "glossary") html = await viewGlossary();
+    else if (a === "assistant") html = viewAssistant();
+    else if (a === "cards") html = viewCards();
+    else if (a === "settings") html = viewSettings();
+    else html = viewHome();
+  } catch (e) { html = `<h1>Не удалось загрузить</h1><p class="muted">${e.message}</p>`; }
+  v.innerHTML = html;
+  window.scrollTo(0, 0);
+  bind(a, b);
+}
+
+function bind(a, b) {
+  document.querySelectorAll(".tab").forEach(t => t.onclick = () => { location.hash = `#/lesson/${b}/${t.dataset.tab}`; });
+  document.querySelectorAll(".check input").forEach(cb => cb.onchange = () => {
+    const k = "checks:" + b, s = store.get(k, {}); s[cb.dataset.i] = cb.checked; store.set(k, s);
+  });
+  const done = document.getElementById("done");
+  if (done) done.onclick = () => { const d = doneMap(); d[b] = true; store.set("done", d); done.textContent = "Урок пройден ✓"; };
+  const play = document.getElementById("play");
+  if (play) play.onclick = () => toggleSpeech(play);
+  const gs = document.getElementById("gsearch");
+  if (gs) gs.oninput = () => document.querySelectorAll("#glist .term").forEach(el => el.style.display = el.dataset.s.includes(gs.value.toLowerCase()) ? "" : "none");
+  const form = document.getElementById("ask");
+  if (form) {
+    const send = async q => {
+      if (!q.trim()) return;
+      const hist = store.get("chat", []); hist.push({ who: "me", text: q.replace(/</g, "&lt;") });
+      hist.push(await answer(q)); store.set("chat", hist.slice(-30));
+      document.getElementById("chat").innerHTML = hist.map(bubble).join("");
+      document.getElementById("q").value = ""; window.scrollTo(0, document.body.scrollHeight);
+    };
+    form.onsubmit = e => { e.preventDefault(); send(document.getElementById("q").value); };
+    document.querySelectorAll(".chip").forEach(c => c.onclick = () => send(c.dataset.q));
+  }
+  if (a === "settings") bindSettings();
+}
+
+function bindSettings() {
+  const save = patch => store.set("settings", Object.assign(userSettings(), patch));
+  const voice = document.getElementById("voice"), rate = document.getElementById("rate");
+  voice.onchange = () => save({ voice: voice.value });
+  rate.oninput = () => { document.getElementById("rateval").textContent = rate.value; save({ rate: Number(rate.value) }); };
+  document.getElementById("testvoice").onclick = () => speak(["Здравствуйте! Это Kot Concept Academy — курс по SMM для бюро «Кота Андрея»."]);
+  document.getElementById("reset").onclick = () => { if (confirm("Сбросить прогресс, отметки и историю помощника на этом устройстве?")) { ["done", "chat"].forEach(k => localStorage.removeItem(PREFIX() + k)); Object.keys(localStorage).filter(k => k.startsWith(PREFIX() + "checks:")).forEach(k => localStorage.removeItem(k)); render(); } };
+  const inst = document.getElementById("install");
+  if (inst) inst.onclick = async () => { window.__installPrompt.prompt(); window.__installPrompt = null; inst.remove(); };
+  const off = document.getElementById("offline");
+  if (off && navigator.serviceWorker) navigator.serviceWorker.getRegistration().then(r => off.textContent = r && r.active ? "готово" : "недоступно (нужен https или localhost)");
+}
+
+// ===== Озвучка через синтезатор речи устройства =====
+function pickVoice() {
+  const s = userSettings(), vs = speechSynthesis.getVoices();
+  return vs.find(v => v.name === s.voice) || vs.find(v => v.lang && v.lang.startsWith("ru") && /female|irina|svetlana|dariya|milena|katya|alena/i.test(v.name)) || vs.find(v => v.lang && v.lang.startsWith("ru"));
+}
+function speak(parts, onend) {
+  const synth = window.speechSynthesis; if (!synth) return false;
+  synth.cancel();
+  const voice = pickVoice(), rate = userSettings().rate;
+  parts.forEach((p, i) => {
+    const u = new SpeechSynthesisUtterance(p); u.lang = CFG.audio.preferred_voice_lang; u.rate = rate; if (voice) u.voice = voice;
+    if (i === parts.length - 1 && onend) u.onend = onend;
+    synth.speak(u);
+  });
+  return !!voice;
+}
+function toggleSpeech(btn) {
+  const synth = window.speechSynthesis; const st = document.getElementById("pstate");
+  if (!synth) { st.textContent = "Озвучка не поддерживается этим браузером"; return; }
+  if (synth.speaking) { synth.cancel(); btn.innerHTML = I.play; st.textContent = "Остановлено"; return; }
+  const parts = (window.__script || "").split(/\[пауза[^\]]*\]/).map(s => s.trim()).filter(Boolean);
+  const ok = speak(parts, () => { btn.innerHTML = I.play; st.textContent = "Прослушано"; });
+  btn.innerHTML = I.pause; st.textContent = ok ? "Идёт воспроизведение…" : "Русский голос не найден — используется голос по умолчанию";
+}
+
+// ===== Старт =====
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); window.__installPrompt = e; });
+window.addEventListener("hashchange", () => { window.speechSynthesis && speechSynthesis.cancel(); render(); });
+if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => { if (location.hash.startsWith("#/settings")) render(); };
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+
+(async function start() {
+  try {
+    CFG = await (await fetch("config.json")).json();
+    MODULES = CFG.course.modules;
+    TOTAL = MODULES.reduce((s, m) => s + m.lessons.length, 0);
+    const c = CFG.brand.colors, r = document.documentElement.style;
+    r.setProperty("--bg", c.background); r.setProperty("--surface", c.surface); r.setProperty("--ink", c.ink);
+    r.setProperty("--muted", c.muted); r.setProperty("--line", c.line); r.setProperty("--soft", c.soft);
+    render();
+  } catch (e) {
+    document.getElementById("view").innerHTML = `<h1>Не удалось загрузить настройки</h1><p class="muted">${e.message}</p>`;
+  }
+})();
+</script>
+</body>
+</html>

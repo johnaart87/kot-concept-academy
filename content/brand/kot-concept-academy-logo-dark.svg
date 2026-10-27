@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 -32 448 184" width="896" height="368" role="img" aria-label="Kot Concept Academy">
+  <title>Kot Concept Academy — на тёмном фоне</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&amp;display=swap');
+    .word { font-family: Montserrat, 'Century Gothic', Arial, sans-serif; fill: #F5F4F1; }
+    .main { font-size: 40px; font-weight: 300; }
+    .sub  { font-size: 14px; font-weight: 500; }
+  </style>
+
+  <!-- Тёмный фон -->
+  <rect x="-32" y="-32" width="448" height="184" fill="#1C1A17"/>
+
+  <!-- Знак: светлый квадрат с тёмной буквой K и точкой -->
+  <rect x="0" y="0" width="120" height="120" fill="#F5F4F1"/>
+  <g fill="#1C1A17">
+    <rect x="28" y="32" width="8" height="56"/>
+    <polygon points="36,63 67,32 78,32 36,74"/>
+    <polygon points="50,60 78,88 67,88 44.5,65.5"/>
+    <rect x="84" y="80" width="8" height="8"/>
+  </g>
+
+  <text class="word main" x="146" y="40" textLength="96" lengthAdjust="spacing">KOT</text>
+  <text class="word main" x="146" y="82" textLength="237" lengthAdjust="spacing">CONCEPT</text>
+  <text class="word sub" x="146" y="108" textLength="237" lengthAdjust="spacing">ACADEMY</text>
+</svg>
